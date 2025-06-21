@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useCallback, useMemo } from 'react'
+import { useEffect, useCallback, useMemo, useState } from 'react'
 import Layout from '@/components/Layout'
 import WeatherCard from '@/components/Weather/WeatherCard'
 import OtherCountries from '@/components/OtherCountries'
@@ -14,6 +14,7 @@ import iconHelper from '@/helpers/iconHelper'
 import { getTranslations } from '@/utils/translations'
 
 export default function Home() {
+
   const {
     weatherData,
     isLoading,
@@ -24,12 +25,10 @@ export default function Home() {
   const { updateDefaultLocation, userSettings } = useWeatherStore()
   const t = getTranslations(userSettings.language)
   
-  // Инициализируем приложение при первом рендере
   useEffect(() => {
     initializeWeatherApp()
   }, [])
   
-  // Helper функции для обработки данных
   const getWeatherCardData = useCallback(() => {
     if (!weatherData) return null
     
@@ -112,24 +111,26 @@ export default function Home() {
     }))
   }, [weatherData, userSettings.language, t])
 
-  // Handler для обновления локации
   const handleLocationChange = useCallback((location: LocationData) => {
     updateDefaultLocation(location)
     fetchWeatherData(location)
   }, [updateDefaultLocation, fetchWeatherData])
 
-  // Handler для повторной попытки загрузки
   const handleRetry = useCallback(() => {
     initializeWeatherApp()
   }, [])
 
-  // Мемоизируем данные для компонентов
   const weatherCardData = useMemo(() => getWeatherCardData(), [getWeatherCardData])
   const countriesData = useMemo(() => getCountriesData(), [getCountriesData])
   const highlightData = useMemo(() => getHighlightData(), [getHighlightData])
   const forecastData = useMemo(() => getForecastData(), [getForecastData])
 
-  // Состояние ошибки
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  if (!mounted) return null
+
   if (error) {
     return (
       <Layout onLocationChange={handleLocationChange}>
@@ -148,7 +149,6 @@ export default function Home() {
     )
   }
 
-  // Состояние загрузки
   if (isLoading || !weatherData) {
     return (
       <Layout onLocationChange={handleLocationChange}>
@@ -185,13 +185,11 @@ export default function Home() {
   return (
     <Layout onLocationChange={handleLocationChange}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Левая колонка */}
         <div className="lg:col-span-5 space-y-6">
           {weatherCardData && <WeatherCard {...weatherCardData} />}
           <OtherCountries countries={countriesData} />
         </div>
 
-        {/* Правая колонка */}
         <div className="lg:col-span-7 space-y-6">
           {highlightData && <TodaysHighlight {...highlightData} />}
           <WeeklyForecast forecast={forecastData} />

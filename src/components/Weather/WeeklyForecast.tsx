@@ -27,6 +27,9 @@ const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ forecast }) => {
           <ForecastDayCard key={index} {...day} />
         ))}
       </div>
+      <h4 className="text-sm text-theme-secondary mt-6">
+        {t.forecastDataNote}
+      </h4>
     </div>
   )
 }

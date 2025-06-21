@@ -186,11 +186,9 @@ function DayDetailModal({ day, onClose, temperatureUnit }: DayDetailModalProps) 
                           <span className="text-xs md:text-sm text-theme-secondary w-10 md:w-12 flex-shrink-0">
                             {hour.time.split(' ')[1]}
                           </span>
-                          <Image
+                          <img
                             src={`https:${hour.icon}`}
                             alt={hour.condition}
-                            width={24}
-                            height={24}
                             className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0"
                           />
                           <span className="text-xs md:text-sm text-theme-primary truncate">
@@ -294,15 +292,12 @@ export default function Calendar() {
   
   const t = getTranslations(userSettings.language)
 
-  // Генерируем дни календаря
   useEffect(() => {
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
     
-    // Первый день месяца
     const firstDay = new Date(year, month, 1)
     
-    // Первый день недели (0 = воскресенье, 1 = понедельник, ...)
     const startDate = new Date(firstDay)
     startDate.setDate(startDate.getDate() - firstDay.getDay())
     
@@ -310,7 +305,6 @@ export default function Calendar() {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     
-    // Генерируем 42 дня (6 недель)
     for (let i = 0; i < 42; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
@@ -318,11 +312,9 @@ export default function Calendar() {
       const isCurrentMonth = date.getMonth() === month
       const fullDate = date.toISOString().split('T')[0]
       
-      // Определяем тип даты
       const isHistorical = date < today
       const isFuture = date > today
       
-      // Проверяем, есть ли данные для этого дня в прогнозе
       const forecastDay = weatherData?.forecast?.forecastday?.find(f => f.date === fullDate)
       
       let detailedData = undefined
@@ -331,7 +323,7 @@ export default function Calendar() {
           humidity: forecastDay.day.avghumidity,
           uv: forecastDay.day.uv,
           windSpeed: forecastDay.day.maxwind_kph,
-          windDir: '', // Направление ветра доступно в hourly данных
+          windDir: '',
           precipitation: forecastDay.day.totalprecip_mm || 0,
           chanceOfRain: forecastDay.day.daily_chance_of_rain || 0,
           chanceOfSnow: forecastDay.day.daily_chance_of_snow || 0,
@@ -376,18 +368,15 @@ export default function Calendar() {
     setCalendarDays(days)
   }, [currentDate, weatherData])
 
-  // Получаем прогноз при загрузке
   useEffect(() => {
     const fetchInitialForecast = async () => {
       if (weatherData?.location) {
-        // Используем уже загруженное местоположение
         const location = {
           lat: weatherData.location.lat,
           lng: weatherData.location.lon
         }
         await fetchWeatherData(location)
       } else if (userSettings.defaultLocation) {
-        // Используем местоположение по умолчанию
         await fetchWeatherData(userSettings.defaultLocation)
       }
     }
@@ -406,7 +395,6 @@ export default function Calendar() {
   const handleDayClick = async (day: CalendarDay) => {
     if (!day.isCurrentMonth || !weatherData?.location) return
     
-    // Если у дня нет данных, пытаемся их загрузить
     if (!day.hasData) {
       try {
         const location = `${weatherData.location.lat},${weatherData.location.lon}`
@@ -415,10 +403,8 @@ export default function Calendar() {
         const currentLang = userSettings.language
         
         if (day.isHistorical) {
-          // Загружаем исторические данные
           dayData = await weatherApi.getHistory(location, day.fullDate, currentLang)
         } else if (day.isFuture) {
-          // Загружаем будущие данные (если поддерживается API)
           try {
             dayData = await weatherApi.getFuture(location, day.fullDate, currentLang)
           } catch {
@@ -430,7 +416,6 @@ export default function Calendar() {
         if (dayData?.forecast?.forecastday?.[0]) {
           const forecastDay = dayData.forecast.forecastday[0]
           
-          // Обновляем данные дня
           const updatedDay: CalendarDay = {
             ...day,
             hasData: true,
@@ -469,7 +454,6 @@ export default function Calendar() {
             }
           }
           
-          // Обновляем календарь
           setCalendarDays(prev => prev.map(d => 
             d.fullDate === day.fullDate ? updatedDay : d
           ))
@@ -498,7 +482,6 @@ export default function Calendar() {
         <h2 className="text-lg md:text-2xl font-bold text-theme-primary">{t.weatherCalendar}</h2>
         
         <div className="bg-theme-card rounded-2xl p-3 md:p-6 shadow-theme-medium">
-          {/* Заголовок с навигацией */}
           <div className="flex justify-between items-center mb-4 md:mb-6">
             <button
               onClick={handlePrevMonth}
@@ -517,7 +500,6 @@ export default function Calendar() {
             </button>
           </div>
 
-          {/* Дни недели */}
           <div className="grid grid-cols-7 gap-1 md:gap-2 mb-3 md:mb-4">
             {t.daysShort.map(day => (
               <div key={day} className="p-1 md:p-2 text-center text-theme-secondary font-semibold text-xs md:text-sm">
@@ -526,7 +508,6 @@ export default function Calendar() {
             ))}
           </div>
 
-          {/* Календарная сетка */}
           <div className="grid grid-cols-7 gap-1 md:gap-2">
             {calendarDays.map((day, index) => (
               <motion.div
@@ -567,7 +548,6 @@ export default function Calendar() {
             ))}
           </div>
 
-          {/* Легенда */}
           <div className="mt-4 md:mt-6 flex flex-wrap justify-center items-center gap-3 md:gap-6 text-xs text-theme-secondary">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 md:w-4 md:h-4 border-l-2 md:border-l-4 border-l-blue-400 bg-theme-tertiary rounded"></div>
@@ -583,7 +563,6 @@ export default function Calendar() {
             </div>
           </div>
 
-          {/* Подсказка */}
           <div className="mt-3 md:mt-4 text-center text-xs md:text-sm text-theme-secondary">
             {isLoading ? (
               t.loading
@@ -600,7 +579,6 @@ export default function Calendar() {
         </div>
       </div>
 
-      {/* Модальное окно с деталями дня */}
       <DayDetailModal
         day={selectedDay}
         onClose={() => setSelectedDay(null)}

@@ -64,10 +64,10 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   scrollbar-width: none;
+  overflow: hidden;
   -ms-overflow-style: none;
 }
 
-/* Кастомные стили для SVG иконок */
 .icon-white {
   filter: brightness(0) invert(1);
 }
@@ -76,7 +76,6 @@ body {
   filter: brightness(0) invert(1) opacity(0.6);
 }
 
-/* Анимации */
 .hover-scale {
   transition: transform 0.2s ease-in-out;
 }
@@ -89,7 +88,6 @@ body {
   display: none;
 }
 
-/* Утилиты для использования переменных */
 @layer utilities {
   .bg-theme-primary { background-color: var(--bg-primary); }
   .bg-theme-secondary { background-color: var(--bg-secondary); }
@@ -115,9 +113,14 @@ body {
   .gradient-theme-card { background: var(--gradient-card); }
 }
 
-/* Переходы для плавного переключения тем */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+  }
 }

@@ -17,7 +17,6 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, [hydrateSettings, setHydrated])
 
   useEffect(() => {
-    // Применяем тему к body и html элементам
     const root = document.documentElement
     const body = document.body
     
