@@ -25,11 +25,11 @@ const OtherCountries: React.FC<OtherCountriesProps> = ({ countries }) => {
   const getWeatherIcon = (icon: string) => {
     switch (icon) {
       case 'sun':
-        return <Image src="/icons/Image8.svg" alt="sun" width={55} height={55} />
+        return <Image src="/icons/image8.svg" alt="sun" width={55} height={55} />
       case 'cloudy-sun':
-        return <Image src="/icons/Image7.svg" alt="cloudy-sun" width={55} height={55} />
+        return <Image src="/icons/image7.svg" alt="cloudy-sun" width={55} height={55} />
       default:
-        return <Image src="/icons/Image8.svg" alt="sun" width={55} height={55} />
+        return <Image src="/icons/image8.svg" alt="sun" width={55} height={55} />
     }
   }
 
