@@ -38,7 +38,15 @@ const WeatherCard = ({
   return (
     <>
     <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl relative z-10">
-      <video autoPlay muted loop className={`absolute top-0 shadow-xl left-0 w-full h-full object-cover filter ${theme === 'dark' ? 'brightness-40' : 'brightness-70'} transition-all duration-300 rounded-2xl z-[-1]`}>
+             <video 
+        autoPlay 
+        muted 
+        loop 
+        playsInline
+        disablePictureInPicture
+        controls={false}
+        className={`absolute top-0 shadow-xl left-0 w-full h-full object-cover filter ${theme === 'dark' ? 'brightness-40' : 'brightness-70'} transition-all duration-300 rounded-2xl z-[-1] pointer-events-none`}
+      >
         <source src={weatherVideo} type="video/mp4" />
       </video>
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-2">
