@@ -88,7 +88,7 @@ const Topbar: React.FC<TopbarProps> = ({
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 z-10 relative">
       {/* Левая часть: приветствие + аватар на мобильных */}
       <div className="flex items-center gap-3">
         {/* Профиль на мобильных рядом с приветствием */}

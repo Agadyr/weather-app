@@ -10,7 +10,7 @@ import { useWeatherStore } from '@/store/weatherStore'
 import { initializeWeatherApp } from '@/store/weatherStore'
 import { LocationData } from '@/types/weather'
 import { motion } from 'framer-motion'
-import iconHelper from '@/helpers/iconHelper'
+import { getWeatherIcon, getWeatherVideo } from '@/helpers/iconHelper'
 import { getTranslations } from '@/utils/translations'
 
 export default function Home() {
@@ -48,7 +48,8 @@ export default function Home() {
       lowTemp: Math.round(today?.day.mintemp_c || current.temp_c - 5),
       condition: current.condition.text,
       feelsLike: Math.round(current.feelslike_c),
-      weatherIcon: iconHelper(current.condition.text)
+      weatherIcon: getWeatherIcon(current.condition.text),
+      weatherVideo: getWeatherVideo(current.condition.text) || ''
     }
   }, [weatherData, userSettings.language])
 
@@ -105,7 +106,7 @@ export default function Home() {
     return weatherData.forecast.forecastday.map((day, index) => ({
       day: index === 0 ? t.today : 
            new Date(day.date).toLocaleDateString(userSettings.language === 'ru' ? 'ru-RU' : 'en-US', { weekday: 'short' }),
-      icon: iconHelper(day.day.condition.text),
+      icon: getWeatherIcon(day.day.condition.text),
       temperature: Math.round(day.day.maxtemp_c),
       condition: day.day.condition.text.toLowerCase().replace(/\s+/g, '-')
     }))

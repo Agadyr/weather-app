@@ -6,7 +6,7 @@ import { useWeatherStore } from '@/store/weatherStore'
 import { weatherApi } from '@/services/weatherApi'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CalendarDay } from '@/types/weather'
-import iconHelper from '@/helpers/iconHelper'
+import { getWeatherIcon } from '@/helpers/iconHelper'
 import Image from 'next/image'
 import { getTranslations, formatDate, formatTime } from '@/utils/translations'
 
@@ -89,7 +89,7 @@ function DayDetailModal({ day, onClose, temperatureUnit }: DayDetailModalProps) 
                       <Image
                         width={48}
                         height={48}
-                        src={iconHelper(day.condition.text)}
+                        src={getWeatherIcon(day.condition.text)}
                         alt={day.condition.text}
                         className="md:w-16 md:h-16"
                       />
