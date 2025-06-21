@@ -37,7 +37,7 @@ const WeatherCard = ({
 
   return (
     <>
-    <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl relative z-10">
+         <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl relative z-0">
              <video 
         autoPlay 
         muted 
